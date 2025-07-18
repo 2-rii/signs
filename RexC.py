@@ -163,7 +163,7 @@ def takeInp():
         cr=input("Sorry that is an invalid card, please choose one from your deck: ")
     aod=input("Would you like to play attack or defense? (A/D): ")
     if aod.lower() not in ["a","d"]:
-        aod=("Sorry, please enter a valid option (A or D): ")
+        aod=input("Sorry, please enter a valid option (A or D): ")
     doTurn(cr.lower(),aod.lower())
 
 def main():

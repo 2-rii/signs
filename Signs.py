@@ -67,23 +67,34 @@ class Bartender:
             print(f'Drink:{i}, XP Cost:{self.bar[i][0]}, Stamina Increase:{self.bar[i][1]}, Health Reduction:{self.bar[i][2]}')
         print("~~~~~~~~~~~~~~~~~~~~~~~")
 
-    def drinkServe(self,player,drink:str):
-        #Drink input validation happens in main program ig
-        if player.xp>=self.bar[drink][0]:
-            print(random.choice(self.choiceDia))
-            player.xp-=self.bar[drink][0]
-            staminaDiff=player.maxStamina-player.currentStamina
-            if self.bar[drink][1]>staminaDiff:
-                player.currentStamina=player.maxStamina
+    def drinkServe(self,player):
+        print(random.choice(self.greetDia))
+        self.displayBar()
+        erCount=0
+        drink=input("What would you like to get today?: ")
+        while (drink not in self.bar) and (erCount<5):
+            erCount+=1
+            drink=input("Sorry, please enter a valid drink option: ")
+        if drink in self.bar:
+            if player.xp>=self.bar[drink][0]:
+                print(random.choice(self.choiceDia))
+                player.xp-=self.bar[drink][0]
+                staminaDiff=player.maxStamina-player.currentStamina
+                if self.bar[drink][1]>staminaDiff:
+                    player.currentStamina=player.maxStamina
+                else:
+                    player.currentStamina+=self.bar[drink][1]
+                if player.currentHealth-self.bar[drink][2]<=0:
+                    player.death()
+                else:
+                    player.takeDamage(self.bar[drink][2])
+                return 1
             else:
-                player.currentStamina+=self.bar[drink][1]
-            if player.currentHealth-self.bar[drink][2]<=0:
-                player.death()
-            else:
-                player.takeDamage(self.bar[drink][2])
-
+                print(random.choice(self.negativeDia))
+                return 0
         else:
-            print(random.choice(self.negativeDia))
+            print("Kaiser doesn't have enough time or energy for your shenanigans, try again later.")
+            return 0
 
 class Witch:
     def __init__(self):
@@ -114,10 +125,67 @@ class Witch:
         else:
             print("You escaped while you could, it's best you don't come back to this...or you can...it's all up to you.")
             time.sleep(1)
+    
+    def displayShop(self):
+        print("~~~~~~~Dementia's Domicile~~~~~~~~")
+        for i in self.shop:
+            print(f'{i}- XP Cost: {self.shop[i][0]}, Stamina Increase: {self.shop[i][1]}, Max Stamina Increase: {self.shop[i][2]}, Health Increase: {self.shop[i][3]}, Max Health Increase: {self.shop[i][4]}')
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            
 
+    def buyPotion(self,player):
+        erCount=0
+        self.displayShop()
+        potionName=input("Please enter the name of the potion you would like to buy: ")
+        while (potionName not in self.shop) and (erCount<5):
+            potionName=input("Sorry, please enter a valid potion name: ")
+            erCount+=1
 
-    def playorbuy():
-        pass
+        if potionName in self.shop:
+            if player.xp>=self.shop[potionName][0]:
+                player.xp-=self.shop[potionName][0]
+                player.maxStamina+=self.shop[potionName][2]
+                player.maxHealth+=self.shop[potionName][4]
+
+                staminaDiff=player.maxStamina-player.currentStamina
+                healthDiff=player.maxHealth-player.currentHealth
+
+                if staminaDiff>self.shop[potionName][1]:
+                    player.currentStamina+=self.shop[potionName][1]
+                else:
+                    player.currentStamina=player.maxStamina
+                if healthDiff>self.shop[potionName][3]:
+                    player.currentHealth+=self.shop[potionName][3]
+                else:
+                    player.currentHealth=player.maxHealth
+                    
+                print(random.choice(self.choiceDia))
+                return 1
+            else:
+                print(random.choice(self.negativeDia))
+                return 0
+        else:
+            print("Dementia got annoyed of the repeated attempts to anger her, try again later")
+            return 0
+        
+    def playorbuy(self,player):
+        erCount=0
+        print("Welcome...to Dementia's Domicile")
+        time.sleep(0.5)
+        print(f'Dementia the Witch: \n{random.choice(self.enterDia)}')
+        print(f'Dementia the Witch: \n{random.choice(self.greetDia)}')
+        print(f'Dementia the Witch: \nI have a rather...special offer for you my dear...why don\'t you join me in a game of Rex? No harm in it, you win you get something, you lose...I get something. Of course you don\'t have to, but it\'s up to you...')
+        playornot=input("So...what will it be? Rex or Buy? (R/B): ")
+        while (playornot.lower() not in ["r","b"]) and (erCount<5):
+            playornot=input("Please enter a valid choice (R or B): ")
+            erCount+=1
+        if playornot.lower()=="r":
+            self.playRex(player)
+        elif playornot.lower()=="b":
+            self.buyPotion(player)
+        else:
+            print("Dementia got annoyed of the repeated attempts to anger her, try again later")
+
 
         
 
