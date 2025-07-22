@@ -37,6 +37,21 @@ class Player:
             self.currentHealth+=healAmount
         print(f'Ahh, that was replenishing wasn\'t it? Your new health is {self.currentHealth}')
     
+    def deductXP(self,XP:float):
+        if self.xp>=XP:
+            self.xp-=XP
+            return True
+        else:
+            return False
+    
+    def addStamina(self,staminaAmt:float):
+        staminaDiff=self.maxStamina-self.currentStamina
+        if staminaAmt>=staminaDiff:
+            self.currentStamina=self.maxStamina
+        else:
+            self.currentStamina+=staminaAmt
+
+
     def changeRoom(self,area:str):
         self.currentRoom=area
 
@@ -76,14 +91,9 @@ class Bartender:
             erCount+=1
             drink=input("Sorry, please enter a valid drink option: ")
         if drink in self.bar:
-            if player.xp>=self.bar[drink][0]:
+            if player.deductXP(self.bar[drink][0]):
                 print(random.choice(self.choiceDia))
-                player.xp-=self.bar[drink][0]
-                staminaDiff=player.maxStamina-player.currentStamina
-                if self.bar[drink][1]>staminaDiff:
-                    player.currentStamina=player.maxStamina
-                else:
-                    player.currentStamina+=self.bar[drink][1]
+                player.addStamina(self.bar[drink][1])
                 if player.currentHealth-self.bar[drink][2]<=0:
                     player.death()
                 else:
@@ -127,6 +137,7 @@ class Witch:
             time.sleep(1)
     
     def displayShop(self):
+        print("\n")
         print("~~~~~~~Dementia's Domicile~~~~~~~~")
         for i in self.shop:
             print(f'{i}- XP Cost: {self.shop[i][0]}, Stamina Increase: {self.shop[i][1]}, Max Stamina Increase: {self.shop[i][2]}, Health Increase: {self.shop[i][3]}, Max Health Increase: {self.shop[i][4]}')
@@ -142,22 +153,12 @@ class Witch:
             erCount+=1
 
         if potionName in self.shop:
-            if player.xp>=self.shop[potionName][0]:
-                player.xp-=self.shop[potionName][0]
+            if player.deductXP(self.shop[potionName][0]):
                 player.maxStamina+=self.shop[potionName][2]
                 player.maxHealth+=self.shop[potionName][4]
 
-                staminaDiff=player.maxStamina-player.currentStamina
-                healthDiff=player.maxHealth-player.currentHealth
-
-                if staminaDiff>self.shop[potionName][1]:
-                    player.currentStamina+=self.shop[potionName][1]
-                else:
-                    player.currentStamina=player.maxStamina
-                if healthDiff>self.shop[potionName][3]:
-                    player.currentHealth+=self.shop[potionName][3]
-                else:
-                    player.currentHealth=player.maxHealth
+                player.heal(self.shop[potionName][3])
+                player.addStamina(self.shop[potionName][1])
                     
                 print(random.choice(self.choiceDia))
                 return 1
@@ -186,8 +187,13 @@ class Witch:
         else:
             print("Dementia got annoyed of the repeated attempts to anger her, try again later")
 
-
-        
+class Weaponsmith:
+    def __init__(self):
+        self.name="Riz the Weaponsmith"
+        #Shop items in the format weapon:[XP Cost, Damage Dealt, Durability, Game Short Form (for battles)]
+        self.shop={"Blade of Honor":[15,15,30,"BH"], "Blade of Glory":[15,30,15,"BG"], "Blade of the East":[30,30,30,"BE"], "Blade of Severance":[60,40,100,"BS"], "Ayutthayan Crossbow":[5,5,20,"AC"], "Riz's Bow":[10,10,20,"RB"], "Axe of the Millions":[15,20,5,"AM"], "The Reaper's Dagger":[2,5,10,"RD"], "Caroline's Mace":[20,30,2,"CM"], "Hunting Spear":[1,5,10,"HS"]}
+        #Upgrade items in the format name:[XP cost, Damage Increase, Durability Increase (only if damaged)]
+        self.upgrades={"Dementia's Curse":[5,5,0], "The Liquid of Uncertainty":[5,0,10], "The Liquid of Doubt":[10,5,15], "The Dweller's Intuition":[20,10,20], "Secrets of the Void":[30,15,40], "Voices of Catharsis":[15,0,40], "Messer's Kuss":[15,15,0]}
 
 
 player=Player()
