@@ -14,6 +14,7 @@ class Player:
         self.maxHealth=100.0
         self.currentHealth=100.0
         self.inventory={}
+        self.weapons={}
         self.spawnRoom="Home"
         self.currentRoom="Home"
     
@@ -51,6 +52,12 @@ class Player:
         else:
             self.currentStamina+=staminaAmt
 
+    def displayWeapons(self):
+        print("\n")
+        print("~~~~~~~Your Weapons~~~~~~~")
+        for i in self.weapons:
+            print(f'{self.weapons[i][3]}- Damage per Hit: {self.weapons[i][0]}, Current Durability: {self.weapons[i][1]}, Max Durability: {self.weapons[i][2]}, Battle Code: {i}')
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
     def changeRoom(self,area:str):
         self.currentRoom=area
@@ -191,9 +198,116 @@ class Weaponsmith:
     def __init__(self):
         self.name="Riz the Weaponsmith"
         #Shop items in the format weapon:[XP Cost, Damage Dealt, Durability, Game Short Form (for battles)]
-        self.shop={"Blade of Honor":[15,15,30,"BH"], "Blade of Glory":[15,30,15,"BG"], "Blade of the East":[30,30,30,"BE"], "Blade of Severance":[60,40,100,"BS"], "Ayutthayan Crossbow":[5,5,20,"AC"], "Riz's Bow":[10,10,20,"RB"], "Axe of the Millions":[15,20,5,"AM"], "The Reaper's Dagger":[2,5,10,"RD"], "Caroline's Mace":[20,30,2,"CM"], "Hunting Spear":[1,5,10,"HS"]}
+        self.shop={"blade of honor":[15,15,30,"BH"], "blade of glory":[15,30,15,"BG"], "blade of the east":[30,30,30,"BE"], "blade of severance":[60,40,100,"BS"], "ayutthayan crossbow":[5,5,20,"AC"], "riz's bow":[10,10,20,"RB"], "axe of the millions":[15,20,5,"AM"], "the reaper's dagger":[2,5,10,"RD"], "caroline's mace":[20,30,2,"CM"], "hunting spear":[1,5,10,"HS"]}
         #Upgrade items in the format name:[XP cost, Damage Increase, Durability Increase (only if damaged)]
-        self.upgrades={"Dementia's Curse":[5,5,0], "The Liquid of Uncertainty":[5,0,10], "The Liquid of Doubt":[10,5,15], "The Dweller's Intuition":[20,10,20], "Secrets of the Void":[30,15,40], "Voices of Catharsis":[15,0,40], "Messer's Kuss":[15,15,0]}
+        self.upgrades={"dementia's curse":[5,5,0], "the liquid of uncertainty":[5,0,10], "the liquid of doubt":[10,5,15], "the dweller's intuition":[20,10,20], "secrets of the void":[30,15,40], "voices of catharsis":[15,0,40], "messer's kuss":[15,15,0]}
+        self.enterDia = ["*Talking to customer* Hey, handle that with care aight? Don’t want you slicing off another finger this time yeah?", "*Sharpening a sword* A warrior looks best when his reflection is stained in blood…", "*Practicing with a dagger* Still got it.", "*Talking to the customer* Pacifism is overrated, isn’t it?", "*Talking to himself* Them Ayutthayans just don’t know how to do it, damn it."]
+        self.greetDia = ["Oh, what’s up Ras? What’ll it be today, sticks or stones?", "There’s my favorite customer, how you doing man? What can I do for you today?", "You’ve come to the right place today Ras, what can I get for you?", "So, Kaiser and Dementia let you down again? I would never heh, what can I do for you today?"]
+        self.choiceDiaU = ["Good choice, one upgrade coming right up!", "So, stones, it is, good choice.", "You did the right thing, I wouldn’t abandon a preciousness like this either", "See that new shine? It’ll help you glimmer in the battlefield once you raise it, call it the warrior’s triumph"]
+        self.choiceDiaP = ["Smart choice, this one definitely gets the job done.", "Remember, the blade chose you, you didn’t choose it.", "I don’t think you’ll be back for a while, after all, nobody does it like the Esperancans. Make it worthwhile.", "Don’t worry, I won’t let the Elder know you bought this heh…", "You, my friend, are a smart individual, coming right up."]
+        self.negativeDia = ["It’s alright friend, I’ll keep it reserved, come back when you have more XP yeah?", "Yeah…so the thing is…I got mouths to feed so I need XP to do this stuff…don’t worry yeah? Come back when you have more.", "I wish I could give you a discounted rate, but the Councilor’s messing with my business model, if he wasn’t so high up, I’d do something, you get me? But yeah, sorry man, come back when you got more XP.", "Good selection, but unfortunately you’re a bit short on XP, so come back when you have the required amount yeah?"]
+
+    def displayShop(self,choice:str):
+        print("\n")
+        print("~~~~~~~Riz's Dungeon~~~~~~~")
+        if choice=="p":
+            for i in self.shop:
+                print(f'{i}- XP Cost: {self.shop[i][0]}, Damage Dealt Per Hit: {self.shop[i][1]}, Durability: {self.shop[i][2]}, Short Form: {self.shop[i][3]}')
+        else:
+            for i in self.upgrades:
+                print(f'{i}- XP Cost: {self.upgrades[i][0]}, Damage Increase: {self.upgrades[i][1]}, Durability Increase: {self.upgrades[i][2]}')
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    
+    def purchase(self,player):
+        erCount=0
+        self.displayShop("p")
+        blade=input("Please input the full name of the item you would like to buy: ")
+        while (blade not in self.shop) and (erCount<5):
+            blade=input("Sorry, that is an invalid option, please enter the name of the item again: ")
+            erCount+=1
+        if (blade in self.shop) and (blade not in player.weapons):
+            if player.deductXP(self.shop[blade][0]):
+                print(random.choice(self.choiceDiaP))
+                # Damage/hit, current Dura, max Dura, name
+                player.weapons[self.shop[blade][3]]=[self.shop[blade][1],self.shop[blade][2],self.shop[blade][2],blade]
+                return 1
+            else:
+                print(random.choice(self.negativeDia))
+        elif blade in player.weapons:
+            print("You already have this weapon, you can't stack them...")
+
+        else:
+            print("Riz got tired of waiting and fell into a nap, try again later.")
+        return 0
+    
+    def selectWeapon(self,player):
+        erCount=0
+        player.displayWeapons()
+        weapon=input("Please input the weapon to be upgraded (battle code): ").upper()
+        while (weapon not in player.weapons) and (erCount<5):
+            weapon=input("Please input a valid weapon (its battle code): ").upper()
+            erCount+=1
+        if weapon in player.weapons:
+            return weapon
+        else:
+            return None
+
+    def upgrade(self,player):
+        weapon=self.selectWeapon(player)
+        if weapon!=None:
+            erCount=0
+            self.displayShop("u")
+            upgrade=input("Please input the full name of the upgrade you want: ").lower()
+            while (upgrade not in self.upgrades) and (erCount<5):
+                upgrade=input("Please input a valid upgrade name: ").lower()
+                erCount+=1
+            if upgrade in self.upgrades:
+                if player.deductXP(self.upgrades[upgrade][0]):
+                    print(random.choice(self.choiceDiaU))
+                    player.weapons[weapon][0]+=self.upgrades[upgrade][1]
+                    duraDiff=player.weapons[weapon][3]-player.weapons[weapon][2]
+                    if self.upgrades[upgrade][2]>=duraDiff:
+                        player.weapons[weapon][1]=player.weapons[weapon][2]
+                    else:
+                        player.weapons[weapon][1]+=self.upgrades[upgrade][2]
+                    return 1
+                else:
+                    print(random.choice(self.negativeDia))
+            else:
+                print("Riz fell asleep whilst waiting for you to choose an upgrade, try again later")
+        else:
+            print("Well, you can't really upgrade a weapon if you don't have it right? Try again later")
+        return 0
+    
+    def uporbuy(self):
+        erCount=0
+        print(random.choice(self.enterDia))
+        print(random.choice(self.greetDia))
+        choice=input("Would you like to upgrade or purchase something? (U/P): ")
+        while (choice.lower() not in ["u,p"]) and (erCount<5):
+            choice=input("Please input a valid option from U or P: ").lower()
+            erCount+=1
+        if choice=="p":
+            self.purchase()
+        elif choice=="u":
+            self.upgrade()
+        else:
+            print("Riz fell asleep whilst waiting for you to choose an upgrade, try again later")
+
+class Trader:
+    def __init__(self):
+        self.name="Alara the Trader"
+        #self.recieve contains items Alara can recieve, and self.give contains items the player can give, pairs are later randomly chosen from both lists (3 pairs ig), this is for the trading interaction
+        #Items in the format itemname:amount to recieve or give. Dicts are limited as of right now due to the scale of the game.
+        self.recieve={"sticks":25, "stones":25, "esparancan fabric":15, "potion of epiphany":1, "hunting spear":1, "dweller fabric":10 }
+        self.give={"blade of honor":1, "potion of healing":1, "sticks":20, "stones":20, "ayutthayan fabric":10, "farben fabric":5 }
+        #Trading system needs a rehaul work later
+        #self.sell will use an external file containing all items to value them, which is another thing to work on
+        self.sell={}
+        
+
+
+
 
 
 player=Player()
