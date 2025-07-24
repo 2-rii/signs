@@ -151,4 +151,82 @@ drinks = {
     }
 }
 
+items = {
+    "ayutthayan fabric": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "AF"
+    },
+    "esperancan fabric": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "EF"
+    },
+    "samnan fabric": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "SF"
+    },
+    "dweller fabric": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "DF"
+    },
+    "sticks": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "ST"
+    },
+    "stones": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "SO"
+    },
+    "tree bark": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "TB"
+    },
+    "leaves": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "LV"
+    },
+    "esperancan drum": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "ED"
+    },
+    "empty book": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "EB"
+    },
+    "paper": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "PP"
+    },
+    "rope": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "RO"
+    },
+    "wool": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "WO"
+    },
+    "mint leaves": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "ML"
+    },
+    "coriander leaves": {
+        "buy_price": None,
+        "sell_price": None,
+        "code": "CL"
+    }
+}
+
 

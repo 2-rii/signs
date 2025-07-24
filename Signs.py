@@ -2,8 +2,17 @@ import time
 import os
 import random
 import RexC
+import ItemsList
 
 #Rex..
+
+def validateInput(prompt,errorPrompt,valid_options,maxTries=5,transform=str.lower):
+    erCount=0
+    inp=transform(input(prompt))
+    while (inp not in valid_options) and (erCount<maxTries):
+        inp=transform(input(errorPrompt))
+        erCount+=1
+    return inp if inp in valid_options else None
 
 class Player:
     def __init__(self):
@@ -41,6 +50,7 @@ class Player:
     def deductXP(self,XP:float):
         if self.xp>=XP:
             self.xp-=XP
+            print(f'You have spent {XP}XP, your new balance is: {self.XP}')
             return True
         else:
             return False
@@ -92,11 +102,7 @@ class Bartender:
     def drinkServe(self,player):
         print(random.choice(self.greetDia))
         self.displayBar()
-        erCount=0
-        drink=input("What would you like to get today?: ")
-        while (drink not in self.bar) and (erCount<5):
-            erCount+=1
-            drink=input("Sorry, please enter a valid drink option: ")
+        drink=validateInput("What would you like to get today?","Sorry,please enter a valid drink option: ",self.bar)
         if drink in self.bar:
             if player.deductXP(self.bar[drink][0]):
                 print(random.choice(self.choiceDia))
@@ -152,12 +158,8 @@ class Witch:
             
 
     def buyPotion(self,player):
-        erCount=0
         self.displayShop()
-        potionName=input("Please enter the name of the potion you would like to buy: ")
-        while (potionName not in self.shop) and (erCount<5):
-            potionName=input("Sorry, please enter a valid potion name: ")
-            erCount+=1
+        potionName=validateInput("Please enter the full name of the potion you want to buy: ", "Sorry, please enter a valid potion name: ", self.shop)
 
         if potionName in self.shop:
             if player.deductXP(self.shop[potionName][0]):
@@ -177,16 +179,12 @@ class Witch:
             return 0
         
     def playorbuy(self,player):
-        erCount=0
         print("Welcome...to Dementia's Domicile")
         time.sleep(0.5)
         print(f'Dementia the Witch: \n{random.choice(self.enterDia)}')
         print(f'Dementia the Witch: \n{random.choice(self.greetDia)}')
         print(f'Dementia the Witch: \nI have a rather...special offer for you my dear...why don\'t you join me in a game of Rex? No harm in it, you win you get something, you lose...I get something. Of course you don\'t have to, but it\'s up to you...')
-        playornot=input("So...what will it be? Rex or Buy? (R/B): ")
-        while (playornot.lower() not in ["r","b"]) and (erCount<5):
-            playornot=input("Please enter a valid choice (R or B): ")
-            erCount+=1
+        playornot=validateInput("So...what will it be? Rex or Buy? (R/B)", "Please enter a valid choice (R or B)", ["r,b"],3)
         if playornot.lower()=="r":
             self.playRex(player)
         elif playornot.lower()=="b":
@@ -219,12 +217,8 @@ class Weaponsmith:
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     
     def purchase(self,player):
-        erCount=0
         self.displayShop("p")
-        blade=input("Please input the full name of the item you would like to buy: ")
-        while (blade not in self.shop) and (erCount<5):
-            blade=input("Sorry, that is an invalid option, please enter the name of the item again: ")
-            erCount+=1
+        blade=validateInput("Please input the full name of the item you would like to buy: ", "Sorry, that is an invalid option, please enter the name of the item again: ", self.shop)
         if (blade in self.shop) and (blade not in player.weapons):
             if player.deductXP(self.shop[blade][0]):
                 print(random.choice(self.choiceDiaP))
@@ -241,12 +235,9 @@ class Weaponsmith:
         return 0
     
     def selectWeapon(self,player):
-        erCount=0
         player.displayWeapons()
+        weapon=validateInput("Please input the weapon to be upgraded (battle code): ", "Please input a valid option (its battle code): ", player.weapons,5,str.upper)
         weapon=input("Please input the weapon to be upgraded (battle code): ").upper()
-        while (weapon not in player.weapons) and (erCount<5):
-            weapon=input("Please input a valid weapon (its battle code): ").upper()
-            erCount+=1
         if weapon in player.weapons:
             return weapon
         else:
@@ -255,12 +246,8 @@ class Weaponsmith:
     def upgrade(self,player):
         weapon=self.selectWeapon(player)
         if weapon!=None:
-            erCount=0
             self.displayShop("u")
-            upgrade=input("Please input the full name of the upgrade you want: ").lower()
-            while (upgrade not in self.upgrades) and (erCount<5):
-                upgrade=input("Please input a valid upgrade name: ").lower()
-                erCount+=1
+            upgrade=validateInput("Please input the full name of the upgrade you want: ", "Please input a valid upgrade name: ",self.upgrades)
             if upgrade in self.upgrades:
                 if player.deductXP(self.upgrades[upgrade][0]):
                     print(random.choice(self.choiceDiaU))
@@ -280,13 +267,9 @@ class Weaponsmith:
         return 0
     
     def uporbuy(self):
-        erCount=0
         print(random.choice(self.enterDia))
         print(random.choice(self.greetDia))
-        choice=input("Would you like to upgrade or purchase something? (U/P): ")
-        while (choice.lower() not in ["u,p"]) and (erCount<5):
-            choice=input("Please input a valid option from U or P: ").lower()
-            erCount+=1
+        choice=validateInput("Would you like to upgrade or purchase something? (U/P): ", "Please input a valid option from U or P: ", ["u","p"])
         if choice=="p":
             self.purchase()
         elif choice=="u":
@@ -297,15 +280,41 @@ class Weaponsmith:
 class Trader:
     def __init__(self):
         self.name="Alara the Trader"
-        #self.recieve contains items Alara can recieve, and self.give contains items the player can give, pairs are later randomly chosen from both lists (3 pairs ig), this is for the trading interaction
-        #Items in the format itemname:amount to recieve or give. Dicts are limited as of right now due to the scale of the game.
-        self.recieve={"sticks":25, "stones":25, "esparancan fabric":15, "potion of epiphany":1, "hunting spear":1, "dweller fabric":10 }
-        self.give={"blade of honor":1, "potion of healing":1, "sticks":20, "stones":20, "ayutthayan fabric":10, "farben fabric":5 }
-        #Trading system needs a rehaul work later
-        #self.sell will use an external file containing all items to value them, which is another thing to work on
-        self.sell={}
-        
+        #Three random trading pairs are chosen from the list in the format [[giveItem,amt,recieveItem,amt]]
+        self.tradingPairs=[["wool",5,"rope",1],["paper",10,"empty book",1],["esperancan fabric",25,"samnan fabric",10],["samnan fabric",30,"potion of healing",1],["esperancan fabric",25,"dweller fabric",3],["dweller fabric",5,"hunting spear",1],["sticks",20,"stones",15],["stones",30,"the reaper's dagger",1]]
+        #for selling & buying, the sell_price and buy_price are used from ItemsList.py and 3 items are randomly selected at a time to buy n sell
+        self.enterDia=["*Talking to herself* Ahh, I just love this village, so MUCH business to do…heh…","*Talking to a customer* Look, you aren’t going to find a better price elsewhere, either you give the garment to me or you stop wasting my time.","*Talking to a customer* Well, I’m not paying THAT much for…whatever this is….actually, you can keep it.","*Looking through her inventory* Somehow, business has been amazing ever since Farben got plundered, I mean, I’m not complaining."]
+        self.greetDia=["Oh hey there Ras, good morning! What can I do for you today?","Ahh, didn’t see you there, so what will it be today, a lengthy bargain or a civil barter?","There’s the village golden boy, how’s Esperanca treating you? I bet it's better than Ayutthaya. Anything I can do for you today?","There’s nothing I don’t have in stock, what can I do for you today Ras?"]
+        self.barterPositiveDia=["Ahh, I love me a good deal, had a nice time doing business with a person who knows what to bring to the table.","Just like how our ancestors have been doing it for centuries now, right?","Now this is the kind of exchange that floats our economy, you get something, I get something. Great doin’ business with you."]
+        self.sellPositiveDia=["Ahh yes…making the most out of the spoils of war…I see… no shame though, everyone’s gotta make a living right?","Another item to add to my already large collection, spread the word will ya? Mention that I don’t ask any questions too…you get me? Keeps the business afloat…","Appreciate you selling this to me, I was looking for it a while now, glad I didn’t have to go down to Samnan to get it and instead had an angel hand deliver it to me…heh"]
+        self.buyPositiveDia=["Mmm…I just love the sound of XP, well it was amazing doing business with you, I guess the Ayutthayans are really more civilized.","I got you a good deal for that huh? Spread the word, will ya?","Well, that’s another item off the shelves, but I trust you’ll take good care of it…"]
+        self.negativeDia=["Well, I can’t really do that, you see…you just don’t have enough. Come back when you have enough of the item.","You know that this is not how a transaction works, the deal is that you bring a specified amount of something and I give you something in return for it, you better come back next time with the proper amount.","It’s alright, the item isn’t going anywhere, unless it does…then whoops, come back later and try again.","Did you just…try to lowball me? Intentional or not, you don’t want to lose the best trader in the entire village."]
 
+    def displayShop(self,choice:str,items:list):
+        print("\n")
+        print("~~~~~~~Alara's Marketplace~~~~~~~")
+        allItems=ItemsList.weapons|ItemsList.items|ItemsList.potions
+        if choice=="t":
+            print("Items available for trade: ")
+            for i in range(len(items)):
+                print(f'{i}- You give {items[i][1]}x {items[i][0]} for {items[i][3]}x {items[i][2]}')
+        elif choice=="b":
+            print("Items available for buying: ")
+            for i in range(len(items)):
+                print(f'{i}- {items[i]} for {allItems[items[i]]["buy_price"]}XP')
+        else:
+            print("Items that Alara is willing to buy: ")
+            for i in range(len(items)):
+                print(f'{i}- {items[i]} for {allItems[items[i]]["sell_price"]}XP')
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+
+class otherNPCs:
+    def __init__(self):
+        self.player=player
+    
+    def homelessMan(self):
+        pass
 
 
 
