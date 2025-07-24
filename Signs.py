@@ -24,6 +24,7 @@ class Player:
         self.currentHealth=100.0
         self.inventory={}
         self.weapons={}
+        self.potions={}
         self.spawnRoom="Home"
         self.currentRoom="Home"
     
@@ -55,6 +56,23 @@ class Player:
         else:
             return False
     
+    def addtoInventory(self,item,amount):
+        if item in self.inventory:
+            self.inventory[item]+=amount
+        else:
+            self.inventory[item]=amount
+        print(f'{item} has been added to your inventory, you now have {self.inventory[item]} of it.')
+    
+    def removefromInventory(self,item,amount):
+        if (item in self.inventory) and (self.inventory[item]>=amount):
+            self.inventory[item]-=amount
+            return True
+        else:
+            print("You do not have enough of this item in your inventory!")
+        if self.inventory[item]==0:
+            del self.inventory[item]
+        return False
+
     def addStamina(self,staminaAmt:float):
         staminaDiff=self.maxStamina-self.currentStamina
         if staminaAmt>=staminaDiff:
@@ -297,16 +315,81 @@ class Trader:
         if choice=="t":
             print("Items available for trade: ")
             for i in range(len(items)):
-                print(f'{i}- You give {items[i][1]}x {items[i][0]} for {items[i][3]}x {items[i][2]}')
+                print(f'{i+1}- You give {items[i][1]}x {items[i][0]} for {items[i][3]}x {items[i][2]}')
         elif choice=="b":
             print("Items available for buying: ")
             for i in range(len(items)):
-                print(f'{i}- {items[i]} for {allItems[items[i]]["buy_price"]}XP')
+                print(f'{i+1}- {items[i]} for {allItems[items[i]]["buy_price"]}XP')
         else:
             print("Items that Alara is willing to buy: ")
             for i in range(len(items)):
-                print(f'{i}- {items[i]} for {allItems[items[i]]["sell_price"]}XP')
+                print(f'{i+1}- {items[i]} for {allItems[items[i]]["sell_price"]}XP')
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+    def pickItems(self, SBorT):
+        its=[]
+        if SBorT=="t":
+            for i in range(3):
+                rdm=random.choice(self.tradingPairs)
+                while rdm in its:
+                    rdm=random.choice(self.tradingPairs)
+                its.append(rdm)
+        else:
+            available=ItemsList.items.keys()
+            for i in range(3):
+                rdm=random.choice(available)
+                while rdm in its:
+                    rdm=random.choice(available)
+                its.append(rdm)
+        return its
+    
+    def trade(self,player):
+        tradingPairs=self.pickItems("t")
+        self.displayShop("t",tradingPairs)
+        choice=validateInput("Please enter the number of the trade you would like to carry out: ", "Sorry, please enter a valid number from 1-3: ", ["1","2","3"])
+        if choice in ["1","2","3"]:
+            choice=int(choice)-1
+            chosenPair=tradingPairs[choice]
+            if chosenPair[2] not in player.weapons:
+                if player.removefromInventory(chosenPair[0],chosenPair[1]):
+                    print(random.choice(self.barterPositiveDia))
+                    player.addtoInventory(chosenPair[2],chosenPair[3])
+                else:
+                    print("Well...you don't really have enough to offer now, do ya?")
+            else:
+                print("Woah woah calm down there...you can't stack weapons around here...")
+        else:
+            print("Alara got tired of waiting for you to choose and had 'other business to attend to'")
+
+    def buy(self,player,):
+        buyOptions=self.pickItems("b")
+        self.displayShop("b",buyOptions)
+        choice=validateInput("Please enter the number of the item you would like to buy from the list: ", "Sorry, please enter a valid number between 1-3: ", ["1","2","3"])
+        if choice in ["1","2","3"]:
+            choice=int(choice)-1
+            buyingProd=buyOptions[choice]
+            if player.deductXP(ItemsList.items[buyingProd]["buy_price"]):
+                player.addtoInventory(buyingProd,1)
+                print(random.choice(self.buyPositiveDia))
+            else:
+                print(random.choice(self.negativeDia))
+        else:
+            print("Alara got tired of waiting for you to choose and had 'other business to attend to'")
+    
+    def sell(self,player):
+        sellOptions=self.pickItems("s")
+        self.displayShop("s",sellOptions)
+        choice=validateInput("Please enter the number of the item you would like to sell from the list: ", "Sorry, please enter a valid number between 1-3: ", ["1","2","3"])
+        if choice in ["1","2","3"]:
+            choice=int(choice)-1
+            sellingProd=sellOptions[choice]
+            if player.removefromInventory(sellingProd,1):
+                print(random.choice(self.sellPositiveDia))
+                player.xp+=ItemsList.items[sellingProd]["sell_price"]
+            else:
+                print(random.choice(self.negativeDia))
+        else:
+            print("Alara got tired of waiting for you to choose and had 'other business to attend to'")
 
 
 class otherNPCs:
