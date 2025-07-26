@@ -15,18 +15,19 @@ def validateInput(prompt,errorPrompt,valid_options,maxTries=5,transform=str.lowe
     return inp if inp in valid_options else None
 
 class Player:
-    def __init__(self):
-        self.name="Ras"
-        self.xp=0.0
-        self.maxStamina=100.0
-        self.currentStamina=0.0
-        self.maxHealth=100.0
-        self.currentHealth=100.0
-        self.inventory={}
-        self.weapons={}
-        self.potions={}
-        self.spawnRoom="Home"
-        self.currentRoom="Home"
+    def __init__(self,name="Ras",xp=50.0,maxStamina=100.0,currentStamina=100.0,maxHealth=100.0,currentHealth=100.0,inventory={},weapons={},potions={},spawnRoom="Home",currentRoom="Home",currentMission=1):
+        self.name=name
+        self.xp=xp
+        self.maxStamina=maxStamina
+        self.currentStamina=currentStamina
+        self.maxHealth=maxHealth
+        self.currentHealth=currentHealth
+        self.inventory=inventory
+        self.weapons=weapons
+        self.potions=potions
+        self.spawnRoom=spawnRoom
+        self.currentRoom=currentRoom
+        self.currentMission=currentMission
     
     def death(self):
         self.currentRoom="Home"
@@ -36,9 +37,11 @@ class Player:
     def takeDamage(self,DamageTaken:float):
         if DamageTaken>=self.currentHealth:
             self.death()
+            return True
         else:
             self.currentHealth-=DamageTaken
             print(f'Ouch! You took {DamageTaken} damage, you have {self.currentHealth} health left')
+            return False
     
     def heal(self,healAmount:float):
         healthDiff=self.maxHealth-self.currentHealth
@@ -390,6 +393,20 @@ class Trader:
                 print(random.choice(self.negativeDia))
         else:
             print("Alara got tired of waiting for you to choose and had 'other business to attend to'")
+    
+    def sellbuyortrade(self):
+        print(random.choice(self.enterDia))
+        print(random.choice(self.greetDia))
+        choice=validateInput("Would you like to sell something, buy or trade today? (S or B or T): ", "Please select a valid option from S, B or T: ", ["s","b","t"])
+        if choice in ["s","b","t"]:
+            if choice=="s":
+                self.sell()
+            elif choice=="b":
+                self.buy()
+            else:
+                self.trade()
+        else:
+            print("Alara got tired of waiting for you to choose and had 'other business to attend to'")
 
 
 class otherNPCs:
@@ -397,22 +414,90 @@ class otherNPCs:
         self.player=player
     
     def homelessMan(self):
-        pass
-
-
-
+        print("<You look towards a lamp post and see a homeless man resting on it>\n")
+        time.sleep(0.65)
+        print("<He looks at you>\n")
+        time.sleep(0.35)
+        print("Homeless Man:\nHey psst…come here…\n")
+        time.sleep(0.4)
+        print("Homeless Man:\nHey hey…you know…the end of the world is near…heheh….there is no worth in life or death…we are ALL going to die soon….HEH\n")
+        time.sleep(0.2)
+        print("Ras:\nSorry?\n")
+        time.sleep(0.2)
+        print("Homeless Man:\nArrrghhh why don’t you get it? We’re ALL going to DIE the end of the world as we know it is COMING\n")
+        time.sleep(0.2)
+        print("Ras:\nAnd…how do you know that?\n")
+        time.sleep(0.2)
+        print("Homeless Man:\nWell, my friend told me that it’s going to end…and I believe his intuition, smart guy really…\n")
+        time.sleep(0.2)
+        print("Ras:\nYeah…I don’t think so…\n")
+        time.sleep(0.2)
+        print("Homeless Man:\nArrgh you are all ignorant people…here…take this book written by my friend…read it and you’ll understand what I’m talking about….\n")
+        time.sleep(0.2)
+        print("<You open the book and it’s empty; there is nothing on any of the pages>")
+        time.sleep(0.35)
+        print("Homeless Man:\nYeah…you can keep that copy…spread the word…let EVERYONE know about the future…\n")
+        time.sleep(0.2)
+        print("Ras:\nUhh...yeah sure...\n")
+        self.player.addtoInventory("empty book",1)
+    
+    def oldMan(self):
+        print("<As you are walking towards the marketplace, you see an old man struggling to carry his groceries>")
+        time.sleep(0.45)
+        print("<You promptly run over to him, intending to help him>")
+        time.sleep(0.2)
+        print("Ras:\nSir, sir, let me help you there…\n")
+        time.sleep(0.2)
+        print("Old Man:\nReyes…is that you?\n")
+        time.sleep(0.2)
+        print("Ras:\nAhh…no sir, I’m Ras…can I help you with those bags?\n")
+        time.sleep(0.2)
+        print("Old Man:\nWell…aren’t you a kind soul?\n")
+        time.sleep(0.2)
+        print("<You take a few bags from him and start walking with him, matching his pace>")
+        time.sleep(0.2)
+        print("Old Man:\nAre you from around here son…? I’ve never seen you at any of our festivals…\n")
+        time.sleep(0.2)
+        print("Ras:\nNo sir…I’m an explorer hailing from Ayutthaya, I’m on a mission to learn more about the forest dwellers.\n")
+        time.sleep(0.2)
+        print("<He promptly looks at you>")
+        time.sleep(0.2)
+        print("Old Man:\nYou bear a very similar resemblance to one of my colleagues from back in the days…it’s exactly the same features too…\n")
+        time.sleep(0.2)
+        print("Ras:\nHaha sir, it’s alright, I get mistaken for a lot of people from time to time, I guess it’s my fate\n")
+        time.sleep(0.2)
+        print("Old Man:\nAhaha, you have a point there\n")
+        time.sleep(0.1)
+        print("Old Man:\nHere we are, can you help me to open the door son?\n")
+        time.sleep(0.2)
+        print("Ras:\nYes, yes of course\n")
+        time.sleep(0.2)
+        print("<You open the door to the house; it’s a humble cabin like yours, but with an interesting difference>")
+        print("<The Old Man walks in to the house and puts the groceries on a table, and you do the same>")
+        time.sleep(0.3)
+        print("Ras:\nYou have a nice collection on the fireplace, are those like trophies of some sort?\n")
+        time.sleep(0.2)
+        print("Old Man:\nAhh…haha…yes they are,I served in the cavalry back in the days, my unit had successfully fended off a major dweller attack back in the days, and so we were awarded for it…\n")
+        time.sleep(0.2)
+        print("Old Man:\nBut then…I just got weaker, and took my leave from the army. Eventually though…I found work in the townhall, working alongside a fella named Reyes…yeah he was a kind soul…until he disappeared…\n")
+        time.sleep(0.2)
+        print("Ras:\nWow…I’m honestly impressed\n")
+        time.sleep(0.2)
+        print("Old Man:\nWhy? You think an Old Man like me can’t achieve stuff like this? Hehe\n")
+        time.sleep(0.2)
+        print("Ras:\nNo no, not that, it’s all really amazing stuff\n")
+        time.sleep(0.2)
+        print("Old Man:\nAhh, yes, I do agree on that…thank you for helping me son…here, take some XP\n")
+        time.sleep(0.2)
+        print("Ras:\nNo no sir, I can’t take your money\n")
+        time.sleep(0.2)
+        print("Old Man:\nArrrgh don’t worry about it, I can’t take it to the grave, here, take some…\n")
+        time.sleep(0.1)
+        print("<The Old Man gives you 35XP for helping him out; kindness truly has its rewards>")
+        self.player.xp+=35
+        time.sleep(0.1)
+        print("Ras:\nThank you so much sir…I hope to see you around\n")
+        time.sleep(0.2)
+        print("Old Man:\nAhaha, goodbye! \n")
 
 player=Player()
-kaiser=Bartender()
-
-
-
-
-
-print("The dark lingers...")
-time.sleep(0.5)
-lORo=input("Would you like to start a new game or load a previous one?: ")
-
-while "new" not in lORo.lower() and "load" not in lORo.lower():
-    lORo=input("Sorry, can you try again?: ")
-
