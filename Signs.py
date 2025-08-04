@@ -501,3 +501,7 @@ class otherNPCs:
         print("Old Man:\nAhaha, goodbye! \n")
 
 player=Player()
+kaiser=Bartender()
+alara=Trader()
+riz=Weaponsmith()
+dementia=Witch()
