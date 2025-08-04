@@ -6,6 +6,15 @@ import ItemsList
 
 #Rex..
 
+def printDialogues(diaList,sleepTime=4,letterswithExtension=30,extensionTime=10):
+    for dia in diaList:
+        if len(dia.split())>=letterswithExtension:
+            print(dia)
+            time.sleep(extensionTime)
+        else:
+            print(dia)
+            time.sleep(sleepTime)
+
 def validateInput(prompt,errorPrompt,valid_options,maxTries=5,transform=str.lower):
     erCount=0
     inp=transform(input(prompt))
@@ -33,6 +42,14 @@ class Player:
         self.currentRoom="Home"
         self.currentHealth=self.maxHealth
         print(f'Yikes, you took a heavy fall there, you\'re back to {self.maxHealth} health and of course, safe and sound at home')
+    
+    def displayInfo(self):
+        print(f'\n~~~~~Your Stats~~~~~~')
+        print(f'Current Health: {self.currentHealth} (Maximum Health: {self.maxHealth})')
+        print(f'Current Stamina: {self.currentStamina} (Maximum Stamina: {self.maxStamina})')
+        print(f'XP Balance: {self.xp}')
+        print(f'Current Mission: {self.currentMission}')
+        print(f'~~~~~~~~~~~~~~~~~~~~~')
     
     def takeDamage(self,DamageTaken:float):
         if DamageTaken>=self.currentHealth:

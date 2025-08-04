@@ -46,6 +46,9 @@ def doBattle(enemyHealth,enemyName,randomFailDia,winEnemyHealth=0, Endamagerange
     else:
         return enemyHealth
 
+def keypadPuzzle():
+    pass
+
 def printDialogues(diaList,sleepTime=4,letterswithExtension=30,extensionTime=10):
     for dia in diaList:
         if len(dia.split())>=letterswithExtension:
@@ -190,6 +193,28 @@ def lunarAbyss(): #Imo, the best of them all
         player.currentMission+=1
         print(f'You have been granted 100XP for successful mission completion, your new balance is {player.xp}')
 
+def cuiBono():
+    print("\nStage7. Cui Bono?\n")
+    time.sleep(4)
+    print("<Shocked by what happened, you decide that it is only right to return to Esperanca, and tell the Elder and the Councilor of the events that unfolded>\n")
+    userOptions(**{"Start Mission":None})
+    missionPart1Dia = ["<In your mind, you think; how many more humans must perish to fulfill the dweller's desire? No more, you believe>\n", "<You sprint back towards the village, only carrying the essentials>\n", "<As you approach the village, you witness the great townhall; and enter nervously>\n", "Ras:\n*panting* Sir, sir...sir...*about to break* sir....Ruh...is gone...\n", "<the Elder gets up from his chair in shock>\n", "Ras:\nWe...were....*looks down* fighting a dweller unit...they wounded him beyond recovery...he bled out.\n", "<the Elder looks at you in sadness>\n", "<At this point, the Councilor also rushes into the main hall>\n", "The Councilor:\nWhat? Where is my secretary...WHERE IS RUH?\n", "Ras:\nHe's...gone...the dwellers robbed him of his life...they stabbed him...\n", "<The Councilor looks towards the Elder>\n", "The Councilor:\nDo you believe this Cyrus? We send him on one mission and suddenly he doesn't come back? Sire, this man is nothing but a spy and a leech.\n", "The Elder:\nSILENCE...!\n", "The Elder:\nHave some shame, a child of Esperanca is dead...and yet...you still think of it as a queen's gambit.\n", "The Councilor:\nFor all we know, Ruh could've been the daybringer! He was the most reliable person in the ENTIRE village, what will we do now? Please, I beg you, arrest this spy.\n", "<You feel the time is now right to tell them, delaying it would just cause more damage than harm>\n", "Ras:\nYes, go ahead, wouldn't you want to imprison the son of Reyes? You all thought of him as a traitor anyways.\n", "Ras:\nBut if you want to hear me out, he was trying to just betray fate, especially when a certain dweller informed him that his son will be the daybringer...you want to arrest me? Go ahead, but Mr. Councilor...I'm sure you'll regret it.\n", "<Both of them look at you in shock>\n", "The Elder:\nHow can it be? Is that really you Glava?\n", "<Now, you're confused>\n", "The Councilor:\nDo YOU really believe him, Cyrus? Glava would never disgrace the land like that...\n", "The Elder:\nI suggest you disgrace your mouth with any more words Brutus.\n", "The Elder:\nGlava, please head back to your quarters for now...it is getting late...we will discuss this tomorrow.\n", "Ras:\nBut, Ruh?\n", "The Elder:\nI will have Gustav send a fortified unit to pick up his body, and give him a proper funeral. He was one of the best of us.\n", "The Elder:\nGo now, daybringer.\n", "<You nod in agreement, and leave the townhall, eventually reaching your house and laying in bed>\n", "<As you drift into sleep, all you can think about is Ruh's words; how can such a friendly person be a past dweller and an infiltrator, and how is it that he just died in your arms?>\n", "<Suddenly, out of nowhere, you're gagged and sacked>\n", "<After an unknown period of time, you wake up; you're suddenly in a jail cell and it's the middle of the night>\n", "<From a door nearby, the Councilor enters the room>\n", "Ras:\n*angrily* What are you doing...release ME\n", "The Councilor:\n*clicks tongue* I'm afraid I can't do that...you see...the dwellers may be cursed, but they're a rather incurable species, hell, we don't even know how they got cursed. You really want to risk an entire village's army on an operation that MIGHT work? Heh, I don't think so.\n", "Ras:\nThe Elder know I'm here?\n", "<The Councilor walks over to an opening in the wall, staring out of it>\n", "The Councilor:\nNo, after all, you did murder Ruh, didn't you?\n", "<You get up in anger>\n", "Ras:\nI DID NOT...!\n", "The Councilor:\nWell, it's mighty convenient that Ruh is dead and suddenly the Daybringer is here. Unfortunately, I don't think the scrolls ever mentioned anything about a cure, the only cure to this disease is eradicating the entire species, only then we will be free of their terror.\n", "Ras:\nYou do know that you're talking about a genocide right? \n", "The Councilor:\nOne death, a tragedy. Many deaths; merely a statistic.\n", "The Councilor:\nAnyways, I'm running late, I have to put a plan into action before sunrise, see you soon at your execution, traitor, just like your father.\n", "<The Councilor leaves the room, but you start banging the bars in anger; you have to somehow stop The Councilor from making the wrong decision that would lead to all out war>\n", "<You compose yourself, and notice that the padlock has a similar lock to what your training academy covered>\n"]
+    missionPart2Dia = ["<After freeing yourself, you have to somehow guide yourself to the Elder's house to tell him about the Councilor's betrayal, but you can't seem to remember where he lives>\n", "<Suddenly you remember how one of the locals told you about how the Elder lives in a modest hut behind the townhall>\n", "<You sprint towards towards the building with all your might, eventually finding a rather small hut>\n", "<What you saw next shocked you, there is a singular hooded person carrying a knife heading towards the Elder's house>\n", "<As you run towards the house, the hooded person has already made their way inside the house>\n", "<As you reach the door, you witness the person about to stab the Elder as they are fast asleep, but you, hold the person from behind and tackle him over>\n", "Ras:\nNnngh...no....\n", "<Hearing all of this commotion, the Elder wakes up in surprise, and steps away in fear>\n", "<You manage to kick the knife away from the hooded person's hand, and are now lightly choking him>\n", "Ras:\nWho...sent you?\n", "<The hooded person manages to elbow you, but fails getting up>\n", "<You tackle the person again, and remove their hood; it's the Councilor>\n", "The Councilor:\nYou....WILL...PAY...\n", "The Elder:\nBrutus...I knew you had something up your sleeve this entire time...10 years for it to come to this day?\n", "The Councilor:\nThey...don't...deserve...to LIVE...they will...pay for...Cara..\n", "The Elder:\nYou are a disgrace to Esperanca, you know that?\n", "<Eventually, you manage to ‘arrest' the Councilor and take him to the townhall, along with the Elder>\n", "<The Elder goes to a soldier guarding the townhall>\n", "The Elder:\nTell General Quinn to gather the townspeople. Right now.\n"]
 
+    printDialogues(missionPart1Dia)
+    done=False
+    while not done:
+        done=keypadPuzzle()
+    print(missionPart2Dia)
+
+    player.xp+=150
+    player.currentMission+=1
+    print(f"You have been granted 150XP for successful mission completion, your new balance is {player.xp}")
+
+def operationDaybringer():
+    pass
+
+def noMission():
+    pass
 
 
