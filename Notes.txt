@@ -1,0 +1,88 @@
+Possible mission names(forest stage):
+    the falling mysts- Introduction to the forest ig, you explore a bit, find sum nice shi, battle a small monster/insect/creature of some sort?
+    village of esperanca- A village not too deep inside the forest, they warn you about the forest dwellers and give you a gift? Maybe some lore like the peacebringer or sumn and Ras realizes its him?
+    betrayal of fate- Deeper into the forest, maybe you battle a big monster? he drops sum good loot ig (good tools n all needed)
+    keepers of the forest- Deeper, again. This time you explore campfire ruins you find, and you get ambushed by the keepers of the forest, they question you about Dementia's whereabouts. You disgaree and ig fight them and geta key of some sort?
+    glimmer of hope/tales of the forgotten/- you return back to esperanca to ask about the key n all, and guide you to a mystical person who gives you some poetic ahh advise ig.
+    sticks and stones/lunar abyss- You venture deeper into the forest and notice that the campfire is gone, you have to survive a cold night using sticks and stones you pick up from previous levels i guess (you die if you dont, but you can come back at the cost of your xp being penalized)
+    operation: daybringer- You encounter a forest dweller settlement and fight ur way thru ig some soliders type shi, and reach this room where you implant a key and somehow bring the city into day(from eternal darkness) and become the 'daybringer' ig?
+
+Final Mission Names & Structure (Forest Stage):
+    the falling mysts- Ras wakes up in Ayutthaya, first day as an explorer of the 'lost civilizations'+the dwellers, encounters a coyote that he has to fight off. He is told by the village chief to find Esperanca as it is safe and close to the 'lost civilizations' of Wahran, but he ofc doesnt know the location rn
+    the village of esperanca- He finds the village, but is labelled as a spy and questioned, but then released and held as a 'guest'. Ruh tells him about Reyes and the daybringer folklore
+    betrayal of fate- Sets out deeper in the forest, fights off a large monster of some sort that was tamed by the forest dwellers. Gets more lore from Ruh if he chooses to talk, and XP and some other goodies if he defeats and a penalty if he doesnt
+    the keepers of the forest- Now even more deeper in the forest, encounters a campfire of some sort, and is ambushed by two keepers (soldiers) who speak in their cryptic tongue and Ras has to fight both of them off, but this makes him feel incredibly guilty and he tells the elder n all. From the campfire tho, he finds a cryptic letter and a map to Wahran.
+    tales of the forgotten- Set next day morning, where you and Ruh visit the head scrollwriter or wtv to talk about the letter, and discover that they think the daybringer is coming and they are prepping for war, and the scrollwriter spits sum more daybringer lore, including that theyre js cursed and it can be solved if a specific potion is made and put in any of the hot springs in Wahran, which will cure them. but Ras and Ruh kinda still "brush" it off, but they tell the elder, who then commands to prep their own defenses and all. The elder says its too dangerous for Ras to go alone to observe the behaviour, and trusts Ruh to go with him next time
+    lunar abyss: Ras gets farther this time, due to Ruh's help, but they encounter keepers again, who fight them and 'recognize' Ruh, and he is injured in battle and they set up camp. Ras noticed Ruh sets the camp up in the same way as the keepers and questions him, Ruh tells him the truth that he's the daybringer type shi, bleeds out and dies
+    cui bono?: He runs back, but is questioned by the councilor and the elder why Ruh hasnt returned, the Elder is in shock that Ras is the DB, but the councilor is in mistrust, and at night, orders his arrest, as well as to prepare a unit to 'invade Wahran' without the Elder's knowledge. The councilor then comes to u n has a generic evil monoglogue and he's like those ppl arent curable theyre monsters they needa die, but then your mission is to escape and all, which you do.
+    operation: daybringer: In this mission, you run to the townhall again, but the elder isnt there so you try to run towards his house, and you see that sum ppl are tryna kill him, so you somehow save him, and tell him everything, then before even sunrise, and asks for a special ops team kinda to arrest the councilor,  he asks for the potion to be made and a unit to be assembled to 'save' Wahran rather than attack it, which you will lead. On your way there, you fight a lot of things but dont kill em, and youre wounded at the end but finally puut the antidote in a hot spring, which flares tf out and sends steam all over Wahran. Your eyes close and you wake up like a few days later in a clinic ig.
+
+
+
+What each function and class does, so I don't forget:
+    Player:
+        __init__(): Consists of name, XP, maxStamina, currentStamina, maxHealth, currentHealth, inventory, weapons, spawnRoom, currentRoom
+        death(): Takes no parameter, resets health and respawns player in room "Home" w a message
+        takeDamage(): Takes amount as parameter, deducts from health and if more than health, calls death()
+        heal(): Heals the player, sets health to maxHealth if the amount is >=difference else just increments health normally
+        deductXP(): Takes amount as parameter and if >=self.XP, deducts and returns True else False (for use in other classes)
+        addStamina(): Same function as the heal() function but js does it to addStamina
+        changeRoom(): No proper functin as of rn, just assigns currentRoom to a room passed in parameter.
+    Bartender:
+        __init__(): Consists of name, the 'bar', dialogues (enter,greet,choice,negative)
+        displayBar(): Displays the bar in a formatted way including the details such as XP cost n all
+        drinkServe(): Combines user input, dialogues, error checking and player.deductXP() to add Stamina and remove Health if necessary, else an appropriate output is printed.
+    Witch:
+        __init__(): Consists of name, the 'shop' and dialogues (enter,greet,choice,negative)
+        playRex(): Calls the minigame 'Rex', and checks for status after game is over. Player dies and loses 25% of XP (player.death()) is called, else if Won, adds 25% additional XP and a potion to player.inventory, else if a draw, prints an appropriate output.
+        displayShop(): Displays the shop in a formatted way including the details such as XP cost and all.
+        buyPotion(): Combines user input, dialogues, error checking to either give the effects of a potion (player.heal(),player.addstamina(),add to player.maxStamina, add to player.maxHealth) or print an appropriate output.
+        playorbuy(): Kind of like the main() for Witch, combines error checking and unique dialogues to call self.buyPotion() or self.playRex()
+    Weaponsmith:
+        __init__(): Consists of name, the 'shop' , the 'upgrades shop' and dialogues (enter,greet,purchase choice, upgrade choice, negative).
+        displayShop(): Displays the shop in a formatted way including the details such as weapon durability and damage.
+        purchase(): Combines error checking, user input, dialogues and inventory handling to add a weapon to player.weapons if not there already, with the appropriate Damage and Durability details. Else, appropriate dialogues are printed.
+        upgrade():
+        uporbuy():
+
+
+print("The dark lingers...")
+time.sleep(0.5)
+lORo=input("Would you like to start a new game or load a previous one?: ")
+
+while "new" not in lORo.lower() and "load" not in lORo.lower():
+    lORo=input("Sorry, can you try again?: ")
+
+
+Possible Places Names:
+    Esperanca: Where the main game takes place, current home of Ras; home to Ruh n all
+    Ayutthaya: Where Ras was born and the village chief is like his foster father after his father (Reyes) died, and from where he got sent on a mission
+    Farben: A village in the universe that was recently plundered by a rival faction
+    Samnan: A rich village w lots of resources and trading activities
+    Wahran: A dweller settlement which used to be a normal village, until the 'disease' spread, converting it into a forest dweller village
+
+Current Characters:
+    Ras/Glava: Protagonist, the daybringer (as he finds out later) & son of Reyes. Glava was his Esperancan name before his father fled w the family.
+    Ruh/Seele: A forest dweller turned villager who after finding love defects, works as a secretary ig to the Councilor, good friend of Ras and has a nice personality, later helps him in fighting against the dwellers but dies in the process (nobody in the village knows ab his past). His original dweller name was Seele
+    Reyes/Julien/Rois: A half forest dweller (his father also had a similar story to Ruh), who recognized Ruh's blood and gave him an ultimatum, later became a mentor to Ruh and after finding out that his son will be the Daybringer, he runs away to many villages to find the truth, eventually settling in Ayutthaya and having Ras, dying before he turned 3 ig. Also a renowned scrollwriter and a friend of the village chief. Lived under the alias Julien when in Ayutthaya
+    Esmeralda/Zamrd: Mother of Ras, a renowned teacher in Ayutthaya, died before he turned 5 ig.
+    The Elder/Cyrus: Leader of Esperanca, a well-respected individual with a fair sense of justice. Actual name is Cyrus, but never explicitly mentioned.
+    The Councilor/Brutus: Second in command of Esperanca, also a well-respected individual with a lot of executive power. Again, name is not explicitly mentioned but is more symbolic for his betrayal to the Elder in the mission Cui Bono? One more thing I like is that before Caesar's assasination, they referred to him as 'Rex', which is the game name.
+    Lucien: Foster father to Ras, raised him, educated him and taught him the way of survival and js general life skills, sent him on a mission to discover more ab the forest dwellers. He was a former head scrollwriter, which is how he met Reyes
+    Eva- Ruh's wife and mother of Mila
+    Mila- Ruh's daughter, part dweller and part human
+    Gustav- A general in the Esperancan army, called by the Elder to handle the dweller situation
+    Quinn- Another general in the army, called by the Elder to handle Brutus's betrayal situation
+    Sapien- The head scrollwriter of Esperanca, Ruh and Ras go to him to obtain knowledge about the dwellers and he guides them, knows the dweller language. Is very scholarly, had a suspicion for Ras being the DB
+    Levan/Layth- Reyes's father and Ras's grandfather, a dweller. Layth was his dweller name. Not mentioned in the game (his name), but for symbolic purpose.
+    Aurora- Reyes's mother, a human who had Reyes with Levan. She was a respected scholar in the village. Again, not mentioned in the game but for symbolic purposes
+    Elin- Mother of Seele/Ruh, again not mentioned in the game, but for symbolic purpose. But she is referred to as 'Mother Seele' in the game.
+    Cara- Daughter of the Councilor who was killed by the dwellers after she wandered too deep into the forest, not explicitly mentioned but her name comes up.
+
+    Kaiser: A bartender in Esperanca, used to be something significant (family-wise) in Bremen before moving to Esperanca
+    Dementia: A witch who is morally twisted, but serves to make potions for her customers
+    Riz: A weaponsmith in Ayutthaya, former war veteran and of high regard, but now makes weapons due to injury in line of work
+    Alara: A trader in Ayutthaya, hailing from Samnan, but moved to Ayutthaya for the business and is a cheeky, and street smart dealer
+
+    Unnamed Old Man: Worked alongside Reyes back int he days when he was still a kind of secretary to the previous councilor, also a war veteran (served in the Esperancan cavalry)
+    Unnamed Homeless Man: Thinks the world is ending cause his 'friend' told him.

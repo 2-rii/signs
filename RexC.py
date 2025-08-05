@@ -179,7 +179,6 @@ def main():
         takeInp()
         time.sleep(1)
 
-main()
     
     
         
