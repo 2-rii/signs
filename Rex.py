@@ -16,7 +16,8 @@ if lOrO=="n":
     counter=1
     while os.path.isfile(fileSub+str(counter)+".json"):
         counter+=1
-    openedFile=open(fileSub+str(counter)+".json","w")
+    openedFile=fileSub+str(counter)+".json"
+    Signs.player.saveGame(openedFile)
 elif lOrO=="l":
     counter=1
     fileL=[]
@@ -28,8 +29,9 @@ elif lOrO=="l":
         print(i)
     print("~~~~~~~~~~~~~~~~~~~~")
     numb=Signs.validateInput("Please enter the number of the save you would like to load","Sorry, please enter a valid number from the list",[str(i[7]) for i in fileL],999)
-    openedFile=open(fileSub+numb+".json")
+    openedFile=fileSub+numb+".json"
     Signs.player.loadGame(openedFile)
+
 
 missions={1:TheForest.theFallingMysts,2:TheForest.villageofEsperanca,3:TheForest.betrayalofFate,4:TheForest.thekeepersoftheForest,5:TheForest.thetalesoftheForgotten,6:TheForest.lunarAbyss,7:TheForest.cuiBono,8:TheForest.operationDaybringer,9:TheForest.noMission}
 

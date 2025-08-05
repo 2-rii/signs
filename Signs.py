@@ -44,13 +44,13 @@ class Player:
     
     def saveGame(self,fn):
         datatoSave={"xp":self.xp,"maxStamina":self.maxStamina,"currentStamina":self.currentStamina,"maxHealth":self.maxHealth,"currentHealth":self.currentHealth,"inventory":self.inventory,"weapons":self.weapons,"potions":self.potions,"currentMission":self.currentMission}
-        with open(fn,"w"):
-            json.dump(datatoSave,fn)
+        with open(fn,"w") as f:
+            json.dump(datatoSave,f)
         print(f'Game has been successfully saved to {fn}')
     
     def loadGame(self,fn):
-        with open(fn,"r"):
-            datatoLoad=json.load(fn)
+        with open(fn,"r") as f:
+            datatoLoad=json.load(f)
         self.xp==datatoLoad["xp"]
         self.maxStamina = datatoLoad["maxStamina"]
         self.currentStamina = datatoLoad["currentStamina"]
@@ -75,12 +75,6 @@ class Player:
         for i in self.inventory:
             print(f'{i}: {self.inventory[i]}')
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    
-    def saveGame(self):
-        pass
-
-    def loadGame(self):
-        pass
     
     def takeDamage(self,DamageTaken:float):
         if DamageTaken>=self.currentHealth:
